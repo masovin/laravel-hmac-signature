@@ -1,0 +1,19 @@
+{
+    "name": "reksakarya/laravel-signature",
+    "description": "Secure with signature",
+    "type": "library",
+    "require": {
+        "php": "^7.3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaravelSignature\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Muhrofin",
+            "email": "masovin.projects@gmail.com"
+        }
+    ]
+}
