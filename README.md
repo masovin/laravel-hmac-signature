@@ -13,15 +13,42 @@ At this time, Laravel Signature only support:
 
 ## Installation
 
-run `composer require reksakarya/laravel-signature`.
+1. run `composer require reksakarya/laravel-signature`.
 
-To publish signature config into application, run:
+2. add autoload to `composer.json`
+```
+...
+  "autoload": {
+    "psr-4": {
+      ...
+      "LaravelSignature\\": "vandor/reksakarya/laravel-signature/src",
+      ...
+    }
+  }
+...
+```
+
+3. run command ```composer dump-autoload```
+
+4. add provider to `config/app.php 
+```
+  "providers" => [
+    ...
+    /*
+    * Package Service Providers...
+    */
+    LaravelSignature\SignatureServiceProvider::class,
+    ...
+  ]
+```
+
+5. To publish signature config into application, run:
 
 ```
 $ php artisan vendor:publish --tag=laravel-signature
 ```
 
-next, we need to setup environtment variable on your `.env` :
+6. next, we need to setup environtment variable on your `.env` :
 ```
 SIGNATURE_EPNBP_ID=
 SIGNATURE_EPNBP_KEY=
@@ -34,7 +61,7 @@ SIGNATURE_JASAPERBANKAN_KEY=
 SIGNATURE_JASAPERBANKAN_SECRET=
 ```
 
-dont forget to run `php artisan config:cache` to save your config change on cache
+7. dont forget to run `php artisan config:cache` to save your config change on cache
 
 then, the installation proccess was complete
 
