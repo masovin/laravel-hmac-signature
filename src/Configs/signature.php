@@ -21,10 +21,10 @@ return [
      * @param key
      * @param secret
      */
-    'kerjasama_bu' => [
+    'kerjasamabu' => [
         'id' => env('SIGNATURE_KERJASAMABU_ID'),       // your e-pnbp clent id
-        'key' => env('SIGNATURE_KERJASAMABU_ID'),      // your e-pnbp key
-        'secret' => env('SIGNATURE_KERJASAMABU_ID'),   // your e-pnbp secret
+        'key' => env('SIGNATURE_KERJASAMABU_KEY'),      // your e-pnbp key
+        'secret' => env('SIGNATURE_KERJASAMABU_SIGNATURE'),   // your e-pnbp secret
     ],
 
     /**
@@ -34,9 +34,9 @@ return [
      * @param key
      * @param secret
      */
-    'jasa_perbankan' => [
+    'jasaperbankan' => [
         'id' => env('SIGNATURE_JASAPERBANKAN_ID'),       // your e-pnbp clent id
-        'key' => env('SIGNATURE_JASAPERBANKAN_ID'),      // your e-pnbp key
-        'secret' => env('SIGNATURE_JASAPERBANKAN_ID'),   // your e-pnbp secret
+        'key' => env('SIGNATURE_JASAPERBANKAN_KEY'),      // your e-pnbp key
+        'secret' => env('SIGNATURE_JASAPERBANKAN_SIGNATURE'),   // your e-pnbp secret
     ],
 ];
