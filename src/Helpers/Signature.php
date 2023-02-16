@@ -25,7 +25,7 @@ class Signature
 
     /**
      * @param Request $request
-     * @param string $app one of 'epnbp' or 'kerjasamabu' or 'jasaperbankan'
+     * @param string $app one of 'epnbp' or 'kerjasamabu' or 'jasaperbankan' or 'pendapatanlainlain'
      * @return boolean
      */
     public static function validate(Request $request, $app)
@@ -83,6 +83,20 @@ class Signature
         $credential['id'] = config('signature.kerjasamabu.id');
         $credential['key'] = config('signature.kerjasamabu.key');
         $credential['secret'] = config('signature.kerjasamabu.secret');
+
+        return self::make($url, $credential);
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return string HMAC-SHA256
+     */
+    public static function pendapatanlainlain($url)
+    {
+        $credential['id'] = config('signature.pendapatanlainlain.id');
+        $credential['key'] = config('signature.pendapatanlainlain.key');
+        $credential['secret'] = config('signature.pendapatanlainlain.secret');
 
         return self::make($url, $credential);
     }

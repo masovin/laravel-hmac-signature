@@ -59,6 +59,9 @@ SIGNATURE_KERJASAMABU_SECRET=
 SIGNATURE_JASAPERBANKAN_ID=
 SIGNATURE_JASAPERBANKAN_KEY=
 SIGNATURE_JASAPERBANKAN_SECRET=
+SIGNATURE_PENDAPTANLAINLAIN_ID=
+SIGNATURE_PENDAPTANLAINLAIN_KEY=
+SIGNATURE_PENDAPTANLAINLAIN_SIGNATURE=
 ```
 
 7. dont forget to run `php artisan config:cache` to save your config change on cache
@@ -67,10 +70,19 @@ then, the installation proccess was complete
 
 ## How to use
 
-by default, Reksa Karya Laravel Signature create signature for existing application **E-PNBP Telekomunikasi, E-PNBP POS, Kerjasama BU, and Jasa Perbankan**
+by default, Reksa Karya Laravel Signature create signature for existing application **E-PNBP Telekomunikasi, E-PNBP POS, Kerjasama Badan Usaha, Management Kas, and Pendapatan Lain Lain**
 
 
-To create signature, call Signature on your class and you can call method `Signature::make(string $url, array $credential)` or you can specific on your apps :
+To create signature, call Signature on your class and you can call static method `Signature::make(string $url, array $credential)` or you can specific on your apps :
+
+> Note! `$credential` variable should be array with value like this:
+> ```
+> $credentiial = [
+>     id: $your-signature-id
+>     key: $your-signature-key
+>     secret: $your-signature-secret
+> ];
+> ```
 
 ```
 <?php
@@ -97,12 +109,17 @@ class YourPortalController {
       $url = 'https://epnbp.baktikominfo.id/bank/api/portal-pendapatan/realisasi?tahun='.$year
       $signatureJasaPerbankan = Signature::jasaperbankan($url);
       ...
+
+      ...
+      $url = 'https://epnbp.baktikominfo.id/pendapatanlainlain/api/portal-pendapatan/realisasi?tahun='.$year
+      $signatureJasaPerbankan = Signature::pendapatanlainlain($url);
+      ...
   } 
   ...
 }
 ```
 
-if you want to validate that the signature, you can call method `Signature::validate($request, $app);` where param `$app` is string of *'epnbp'* or *'kerjasamabu'* or *'jasaperbankan'*. here the example :
+if you want to validate that the signature, you can call method `Signature::validate($request, $app);` where param `$app` is string of *'epnbp'* or *'kerjasamabu'* or *'jasaperbankan'* or *'pendapatanlainlain'*. here the example :
 
 
 ```
@@ -122,11 +139,15 @@ class PortalApiController extends Controller {
       ...
       
       ...
-      $idValid = Signature::validate($request, 'kerjasamabu');
+      $isValid = Signature::validate($request, 'kerjasamabu');
       ...
       
       ...
-      $idValid = Signature::validate($request, 'jasaperbankan');
+      $isValid = Signature::validate($request, 'jasaperbankan');
+      ...
+
+      ...
+      $isValid = Signature::validate($request, 'pendapatanlainlain');
       ...
   } 
   ...
@@ -138,19 +159,22 @@ if you want to test signature by postman, first setup Postman **Pre-request Scri
 
 first add this variable to environtment : 
 
-| `VARIABLE`                       | `VALUE`                    |
-|----------------------------------|----------------------------|
-| SIGNATURE_EPNBP_ID               | YOUR_EPNBP_ID              |
-| SIGNATURE_EPNBP_KEY              | YOUR_EPNBP_KEY             |
-| SIGNATURE_EPNBP_SECRET           | YOUR_EPNBP_SECRET          |
-| SIGNATURE_KERJASAMABU_ID         | YOUR_KERJASAMABU_ID        |
-| SIGNATURE_KERJASAMABU_KEY        | YOUR_KERJASAMABU_KEY       |
-| SIGNATURE_KERJASAMABU_SECRET     | YOUR_KERJASAMABU_SECRET    |
-| SIGNATURE_JASAPERBANKAN_ID       | YOUR_JASAPERBANKAN_ID      |
-| SIGNATURE_JASAPERBANKAN_KEY      | YOUR_JASAPERBANKAN_KEY     |
-| SIGNATURE_JASAPERBANKAN_SECRET   | YOUR_JASAPERBANKAN_SECRET  |
-| signature_payload                | YOUR_JASAPERBANKAN_SECRET  |
-| signature                        | YOUR_JASAPERBANKAN_SECRET  |
+| `VARIABLE`                            | `VALUE`                    |
+|---------------------------------------|----------------------------|
+| SIGNATURE_EPNBP_ID                    | YOUR_EPNBP_ID              |
+| SIGNATURE_EPNBP_KEY                   | YOUR_EPNBP_KEY             |
+| SIGNATURE_EPNBP_SECRET                | YOUR_EPNBP_SECRET          |
+| SIGNATURE_KERJASAMABU_ID              | YOUR_KERJASAMABU_ID        |
+| SIGNATURE_KERJASAMABU_KEY             | YOUR_KERJASAMABU_KEY       |
+| SIGNATURE_KERJASAMABU_SECRET          | YOUR_KERJASAMABU_SECRET    |
+| SIGNATURE_JASAPERBANKAN_ID            | YOUR_JASAPERBANKAN_ID      |
+| SIGNATURE_JASAPERBANKAN_KEY           | YOUR_JASAPERBANKAN_KEY     |
+| SIGNATURE_JASAPERBANKAN_SECRET        | YOUR_JASAPERBANKAN_SECRET  |
+| SIGNATURE_PENDAPTAANLAINLAIN_ID       | YOUR_JASAPERBANKAN_ID      |
+| SIGNATURE_PENDAPATANLAINLAIN_KEY      | YOUR_JASAPERBANKAN_KEY     |
+| SIGNATURE_PENDAPATANLAINLAIN_SECRET   | YOUR_JASAPERBANKAN_SECRET  |
+| signature_payload                     | YOUR_JASAPERBANKAN_SECRET  |
+| signature                             | YOUR_JASAPERBANKAN_SECRET  |
 
 next, add this script to every request to `Pre-request Script` to generate signature before sending request : 
 ```
