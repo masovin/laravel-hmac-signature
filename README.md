@@ -8,8 +8,8 @@ Laravel Signature will help you to secure data by identifying who is accessing y
 ## Requirements
 
 At this time, Laravel Signature only support:
-- Laravel ^7.x.
-- PHP ^7.3.0
+- Laravel ^7.x. | ^8.x
+- PHP ^7.3.0 | ^8.0
 
 ## Installation
 
@@ -30,7 +30,7 @@ At this time, Laravel Signature only support:
 
 3. run command ```composer dump-autoload```
 
-4. add provider to `config/app.php 
+4. add provider to `config/app.php
 ```
   "providers" => [
     ...
@@ -92,19 +92,19 @@ use LaravelSignature\Helpers\Signature;
 
 class YourPortalController {
   ...
-  
+
   public function getRealisasiPendapatan($year)
   {
       ...
       $url = 'https://ditdal.kominfo.go.id/api/portal-pendapatan/realisasi?tahun='.$year
       $signatureEpnbp = Signature::epnbp($url);
       ...
-      
+
       ...
       $url = 'https://epnbp.baktikominfo.id/api/portal-pendapatan/realisasi?tahun='.$year
       $signatureKerjasamaBU = Signature::kerjasamabu($url);
       ...
-      
+
       ...
       $url = 'https://epnbp.baktikominfo.id/bank/api/portal-pendapatan/realisasi?tahun='.$year
       $signatureJasaPerbankan = Signature::jasaperbankan($url);
@@ -114,7 +114,7 @@ class YourPortalController {
       $url = 'https://epnbp.baktikominfo.id/pendapatanlainlain/api/portal-pendapatan/realisasi?tahun='.$year
       $signatureJasaPerbankan = Signature::pendapatanlainlain($url);
       ...
-  } 
+  }
   ...
 }
 ```
@@ -131,17 +131,17 @@ use LaravelSignature\Helpers\Signature;
 
 class PortalApiController extends Controller {
   ...
-  
+
   public function getRealisasiPendapatan(Request $request, $year)
   {
       ...
       $isValid = Signature::validate($request, 'epnbp');
       ...
-      
+
       ...
       $isValid = Signature::validate($request, 'kerjasamabu');
       ...
-      
+
       ...
       $isValid = Signature::validate($request, 'jasaperbankan');
       ...
@@ -149,7 +149,7 @@ class PortalApiController extends Controller {
       ...
       $isValid = Signature::validate($request, 'pendapatanlainlain');
       ...
-  } 
+  }
   ...
 }
 ```
@@ -157,7 +157,7 @@ class PortalApiController extends Controller {
 ## Implementation on Postman
 if you want to test signature by postman, first setup Postman **Pre-request Script** to test api with signature.
 
-first add this variable to environtment : 
+first add this variable to environtment :
 
 | `VARIABLE`                            | `VALUE`                    |
 |---------------------------------------|----------------------------|
@@ -176,22 +176,22 @@ first add this variable to environtment :
 | signature_payload                     | YOUR_JASAPERBANKAN_SECRET  |
 | signature                             | YOUR_JASAPERBANKAN_SECRET  |
 
-next, add this script to every request to `Pre-request Script` to generate signature before sending request : 
+next, add this script to every request to `Pre-request Script` to generate signature before sending request :
 ```
 function getPath(url) {
     var pathRegex = /.+?\:\/\/.+?(\/.+?)(?:#|\?|$)/;
     var result = url.match(pathRegex);
-    return result && result.length > 1 ? result[1] : ''; 
+    return result && result.length > 1 ? result[1] : '';
 }
- 
- 
+
+
 function getAuthHeader(httpMethod, requestUrl) {
     var requestPath = getPath(requestUrl);
-    
+
     payload = pm.environment.get('SIGNATURE_EPNBP_ID') + ':' + requestPath + ':' + pm.environment.get('SIGNATURE_EPNBP_KEY');
     postman.setEnvironmentVariable('signature_payload', payload);
-    
-              
+
+
     var hmacSignature = CryptoJS.HmacSHA256(payload, pm.environment.get('SIGNATURE_EPNBP_SECRET'));
     return hmacSignature;
 }
@@ -199,7 +199,7 @@ function getAuthHeader(httpMethod, requestUrl) {
 postman.setEnvironmentVariable('signature', getAuthHeader(request['method'], request['url']));
 ```
 
-don't forget to add `signature` key on your **header request** like this : 
+don't forget to add `signature` key on your **header request** like this :
 
 | `KEY`                       | `VALUE`                    |
 |-----------------------------|----------------------------|
